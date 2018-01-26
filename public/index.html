@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>Web Worker test</title>
+
+  <!-- load local jquery file -->
+  <script src="./src/jquery.min.js"></script>
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="./src/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="./src/bootstrap-theme.min.css">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="./src/bootstrap.min.js"></script>
+
+  <!-- local js files -->
+  <script src="./js/main.js"></script>
+  <script src="./js/importmgmt.js"></script>
+  <link rel="stylesheet" type="text/css" href="./css/style.css">
+
+</head>
+
+<body>
+
+  <div class="jumbotron-fluid">
+    <h1 class="display-3">Web Worker test</h1>
+    <hr class="my-4">
+  </div>
+
+  <div class="container-fluid">
+
+    <div class="row">
+      <div class="col-sm-12">
+        <h4>Please load CSV file</h4>
+        <input type="file" id="file" name="file" value="">
+        <br><br><br>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <h4>Performance</h4>
+        <h6>Status     : <span id="status"></span></h6>
+        <h6>Total time : <span id="totalSeconds"></span> seconds</h6>
+        <h6>Chunks     : <span id="chunks"></span></h6>
+        <br>
+        <table class="table table-hover">
+          <tr>
+            <th>Stage</th>
+            <th>Time completed</th>
+            <th>Epoch</th>
+          </tr>
+        </table>
+        <br>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+
+</html>
