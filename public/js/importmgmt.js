@@ -83,6 +83,7 @@ function workerProcessing(data) {
 
     chunk++;
 
+    //check if all chunks are processed
     if (chunk >= chunkSize) {
 
       console.log("end result:", assembledArray);
