@@ -61,7 +61,7 @@ function workerProcessing(data) {
     arrEntries = res.data.entries();
 
     workerStage2.postMessage(arrEntries.next().value[1]);
-  }
+  };
 
   //on message of the second worker
   workerStage2.onmessage = function(res) {
@@ -71,7 +71,7 @@ function workerProcessing(data) {
 
     //send data to stage 3 worker
     workerStage3.postMessage(res.data);
-  }
+  };
 
   //on message of the third worker
   chunk = 0;
@@ -106,7 +106,7 @@ function workerProcessing(data) {
         workerStage2.postMessage(arrEntry.value[1]);
       }
     }
-  }
+  };
 }
 
 

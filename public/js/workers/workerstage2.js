@@ -15,4 +15,4 @@ onmessage = function(e) {
 
   //post back results
   postMessage(array);
-}
+};

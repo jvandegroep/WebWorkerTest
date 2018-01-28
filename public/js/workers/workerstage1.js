@@ -26,4 +26,4 @@ onmessage = function(e) {
   //post back results
   postMessage(arrGroup);
   close();
-}
+};

@@ -14,7 +14,7 @@ function perfTable(string, epoch) {
   var dateStart = $('.table > tbody > tr')[0].cells[2].innerText;
   var dateEnd = $('.table > tbody > tr:last')[0].cells[2].innerText;
 
-  var totalTime = parseFloat((parseInt(dateEnd) - parseInt(dateStart)) / 1000).toFixed(2)
+  var totalTime = parseFloat((parseInt(dateEnd) - parseInt(dateStart)) / 1000).toFixed(2);
 
   $('#totalSeconds').html(totalTime);
 }
