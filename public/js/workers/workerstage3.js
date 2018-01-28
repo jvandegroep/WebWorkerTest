@@ -1,12 +1,14 @@
 /*
   WORKER STAGE 3
 */
+
 onmessage = function(e) {
+  var data = JSON.parse(e.data);
 
   console.log('Worker stage 3: message received from importmgmt.js');
 
   // process here
-  e.data.forEach( function(subArr){
+  data.forEach( function(subArr){
 
     subArrLen = subArr.length;
 
@@ -16,5 +18,5 @@ onmessage = function(e) {
   });
 
   //post back results
-  postMessage(e.data);
+  postMessage(JSON.stringify(data));
 };

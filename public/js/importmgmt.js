@@ -45,22 +45,23 @@ function workerProcessing(data) {
   var workerStage3 = new Worker('./js/workers/workerstage3.js');
 
   //send data to first worker
-  workerStage1.postMessage(data);
+  workerStage1.postMessage(JSON.stringify(data));
 
   //on message of the first worker
-  workerStage1.onmessage = function(res) {
 
+  workerStage1.onmessage = function(res) {
+    var data = JSON.parse(res.data);
     //console.log('Stage 1 done @ ', new Date());
     perfTable('Stage 1', (new Date()).getTime());
 
     //determine chunksize used in worker 1
-    chunkSize = res.data.length;
+    chunkSize = data.length;
     console.log('The array is split into', chunkSize + ' chunks.');
     $('#chunks').html(chunkSize);
 
-    arrEntries = res.data.entries();
+    arrEntries = data.entries();
 
-    workerStage2.postMessage(arrEntries.next().value[1]);
+    workerStage2.postMessage(JSON.stringify(arrEntries.next().value[1]));
   };
 
   //on message of the second worker
@@ -77,12 +78,14 @@ function workerProcessing(data) {
   chunk = 0;
   workerStage3.onmessage = function(res) {
 
+    var data = JSON.parse(res.data);
+
     //console.log('Stage 3 done @ ', new Date());
     perfTable('Stage 3', (new Date()).getTime());
     chunksDone();
 
     //send data to be assemblied
-    assembleData(res.data);
+    assembleData(data);
 
     chunk++;
 
@@ -103,7 +106,7 @@ function workerProcessing(data) {
 
       if (arrEntry.done === false) {
 
-        workerStage2.postMessage(arrEntry.value[1]);
+        workerStage2.postMessage(JSON.stringify(arrEntry.value[1]));
       }
     }
   };

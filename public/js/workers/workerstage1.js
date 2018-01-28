@@ -1,12 +1,12 @@
 /*
   WORKER STAGE 1
 */
-onmessage = function(e) {
-
+onmessage = function( e ) {
+  var data = JSON.parse(e.data);
   console.log('Worker stage 1: message received from importmgmt.js');
 
   // split by new line
-  var array = e.data.split('\n');
+  var array = data.split('\n');
 
   var arrGroup = [];
   var arrLen = array.length;
@@ -24,6 +24,6 @@ onmessage = function(e) {
   }
 
   //post back results
-  postMessage(arrGroup);
+  postMessage(JSON.stringify(arrGroup));
   close();
 };
