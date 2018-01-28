@@ -1,4 +1,5 @@
 var chunkSize = 0;
+var arrEntries;
 
 /*
   IMPORT CSV DATA
@@ -9,6 +10,9 @@ function importCSVData(evt) {
   if (file) {
 
     console.log('File import active!');
+    $('.table > tbody').html(""); //empty table
+    $('#progress').html('0'); // set progress to null
+
     var reader = new FileReader();
 
     //handle file on load
@@ -51,14 +55,12 @@ function workerProcessing(data) {
 
     //determine chunksize used in worker 1
     chunkSize = res.data.length;
-    console.log('The array is split in ', chunkSize + 'chunks.');
+    console.log('The array is split into', chunkSize + ' chunks.');
     $('#chunks').html(chunkSize);
 
-    //send data chunks to stage 2 worker
-    res.data.forEach(function(subArr) {
+    arrEntries = res.data.entries();
 
-      workerStage2.postMessage(subArr);
-    });
+    workerStage2.postMessage(arrEntries.next().value[1]);
   }
 
   //on message of the second worker
@@ -77,6 +79,7 @@ function workerProcessing(data) {
 
     //console.log('Stage 3 done @ ', new Date());
     perfTable('Stage 3', (new Date()).getTime());
+    chunksDone();
 
     //send data to be assemblied
     assembleData(res.data);
@@ -89,9 +92,19 @@ function workerProcessing(data) {
       console.log("end result:", assembledArray);
       $('#status').html('Done').css("color", "black");
 
-      //terminate workers
+      //terminate worker
       workerStage2.terminate();
-      workerStage3.terminate();
+      //workerStage3.terminate();
+
+    } else {
+
+      // get next array entry
+      var arrEntry = arrEntries.next();
+
+      if (arrEntry.done === false) {
+
+        workerStage2.postMessage(arrEntry.value[1]);
+      }
     }
   }
 }

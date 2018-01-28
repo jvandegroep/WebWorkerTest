@@ -17,5 +17,4 @@ onmessage = function(e) {
 
   //post back results
   postMessage(e.data);
-
 }

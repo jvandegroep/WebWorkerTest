@@ -10,7 +10,7 @@ onmessage = function(e) {
 
   var arrGroup = [];
   var arrLen = array.length;
-  var chunk = 40000; //how many lines per chunk
+  var chunk = 100000; //how many lines per chunk
 
   if (arrLen > chunk) {
 
