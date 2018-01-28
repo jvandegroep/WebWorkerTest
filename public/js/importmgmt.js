@@ -46,6 +46,7 @@ function workerProcessing(data) {
 
   //send data to first worker
   workerStage1.postMessage(JSON.stringify(data));
+  data = []; // clear data
 
   //on message of the first worker
 
@@ -60,6 +61,8 @@ function workerProcessing(data) {
     $('#chunks').html(chunkSize);
 
     arrEntries = data.entries();
+    data = undefined; //clear data
+    res = undefined; //clear data
 
     workerStage2.postMessage(JSON.stringify(arrEntries.next().value[1]));
   };
@@ -72,6 +75,7 @@ function workerProcessing(data) {
 
     //send data to stage 3 worker
     workerStage3.postMessage(res.data);
+    res = undefined;
   };
 
   //on message of the third worker
@@ -79,6 +83,7 @@ function workerProcessing(data) {
   workerStage3.onmessage = function(res) {
 
     var data = JSON.parse(res.data);
+    res = undefined;
 
     //console.log('Stage 3 done @ ', new Date());
     perfTable('Stage 3', (new Date()).getTime());
@@ -86,6 +91,7 @@ function workerProcessing(data) {
 
     //send data to be assemblied
     assembleData(data);
+    data = undefined;
 
     chunk++;
 
@@ -97,7 +103,7 @@ function workerProcessing(data) {
 
       //terminate worker
       workerStage2.terminate();
-      //workerStage3.terminate();
+      workerStage3.terminate();
 
     } else {
 
