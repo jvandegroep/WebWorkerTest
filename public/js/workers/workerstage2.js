@@ -3,17 +3,17 @@
 */
 onmessage = function(e) {
 
-  var data = JSON.parse(e.data);
   console.log('Worker stage 2: message received from importmgmt.js');
 
   // process here
-  var array = [];
+  var newArray = [];
+  var arrLen = e.data.length;
 
-  data.forEach( function(line) {
-
-    array.push(line.split(','));
-  });
+  for (var i = 0; i < arrLen; i++) {
+    newArray.push(e.data[i].split(','));
+  }
 
   //post back results
-  postMessage(JSON.stringify(array));
+  postMessage(newArray);
+  close();
 };

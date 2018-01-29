@@ -2,15 +2,15 @@
   WORKER STAGE 1
 */
 onmessage = function( e ) {
-  var data = JSON.parse(e.data);
+
   console.log('Worker stage 1: message received from importmgmt.js');
 
   // split by new line
-  var array = data.split('\n');
+  var array = e.data.split('\n');
 
   var arrGroup = [];
   var arrLen = array.length;
-  var chunk = 40000; //how many lines per chunk
+  var chunk = 80000; //how many lines per chunk
 
   if (arrLen > chunk) {
 
@@ -24,6 +24,6 @@ onmessage = function( e ) {
   }
 
   //post back results
-  postMessage(JSON.stringify(arrGroup));
+  postMessage(arrGroup);
   close();
 };
