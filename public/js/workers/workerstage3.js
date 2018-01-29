@@ -11,7 +11,7 @@ onmessage = function(e) {
 
   for (var j = 0; j < arrLen; j++) {
 
-    var subArr = e.data[j]
+    var subArr = e.data[j];
     var subArrLen = subArr.length;
 
     for (var i = 0; i < subArrLen; i++) {

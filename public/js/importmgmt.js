@@ -34,7 +34,7 @@ function importCSVData(evt) {
 
 
 /*
-  PROCESSING ORCHESTRATION BY WORKERS
+  Processing data by worker
 */
 function workerProcessing(data) {
 
@@ -51,7 +51,6 @@ function workerProcessing(data) {
   data = []; // clear data
 
   //on message of the first worker
-
   workerStage1.onmessage = function(res) {
 
     perfTable('Stage 1', (new Date()).getTime());
@@ -65,14 +64,14 @@ function workerProcessing(data) {
     res = undefined; //clean res
     self.onmessage = undefined;
 
-    //kick of Workers 2 and 3
+    //run workers 2 and 3
     runWorkers();
   };
 }
 
 
 /*
-  RUN WORKERS 2 & 3
+  INITIATE WORKERS 2 & 3
 */
 function runWorkers() {
 
@@ -125,8 +124,8 @@ function runWorkers() {
         } else {
           runWorkers(); //spawn workers till all chunks are processed.
         }
-      }
-    }
+      };
+    };
   }
 }
 
