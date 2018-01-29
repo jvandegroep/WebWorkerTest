@@ -90,17 +90,17 @@ function runWorkers() {
 
       perfTable('Stage 2', (new Date()).getTime());
 
-      eval("workerStage3_" + i + " = new Worker('./js/workers/workerstage3.js')");
+      var workerStage3 = new Worker('./js/workers/workerstage3.js');
 
       //send data to worker 3
-      eval("workerStage3_" + i).postMessage(res.data);
+      workerStage3.postMessage(res.data);
 
       //clear data
       this.onmessage = undefined;
       res = undefined;
 
       //on message of the third worker
-      eval("workerStage3_" + i).onmessage = function (res) {
+      workerStage3.onmessage = function (res) {
 
         //console.log('Stage 3 done @ ', new Date());
         perfTable('Stage 3', (new Date()).getTime());
