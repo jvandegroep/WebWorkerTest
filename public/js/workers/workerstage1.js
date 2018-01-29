@@ -1,29 +1,31 @@
 /*
   WORKER STAGE 1
 */
-onmessage = function( e ) {
-  var data = JSON.parse(e.data);
-  console.log('Worker stage 1: message received from importmgmt.js');
+onconnect = function(e) {
+  var port1 = e.ports[0];
 
-  // split by new line
-  var array = data.split('\n');
+  port1.onmessage = function(e) {
+    console.log('Worker stage 1: message received from importmgmt.js');
 
-  var arrGroup = [];
-  var arrLen = array.length;
-  var chunk = 40000; //how many lines per chunk
+    // split by new line
+    var array = e.data.split('\n');
 
-  if (arrLen > chunk) {
+    var arrGroup = [];
+    var arrLen = array.length;
+    var chunk = 40000; //how many lines per chunk
 
-    // split array into n chuncks
-    for (var i = 0; i < arrLen; i += chunk) {
-      arrGroup.push(array.slice(i, i + chunk));
+    if (arrLen > chunk) {
+
+      // split array into n chuncks
+      for (var i = 0; i < arrLen; i += chunk) {
+        arrGroup.push(array.slice(i, i + chunk));
+      }
+    } else {
+
+      arrGroup = array;
     }
-  } else {
 
-    arrGroup = array;
-  }
-
-  //post back results
-  postMessage(JSON.stringify(arrGroup));
-  close();
-};
+    //post back results
+    port1.postMessage(arrGroup);
+  };
+}

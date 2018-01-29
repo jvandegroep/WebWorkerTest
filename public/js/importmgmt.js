@@ -18,8 +18,8 @@ function importCSVData(evt) {
     //handle file on load
     reader.onload = (function() {
 
-      //send data to workers, and empty previous result
-      assembledArray = [];
+      //send data to workers
+      assembledArray = []; //and empty previous results
       workerProcessing(reader.result);
     });
 
@@ -40,58 +40,40 @@ function workerProcessing(data) {
   $('#status').html('busy').css("color", "orange");
 
   //starting workers
-  var workerStage1 = new Worker('./js/workers/workerstage1.js');
-  var workerStage2 = new Worker('./js/workers/workerstage2.js');
-  var workerStage3 = new Worker('./js/workers/workerstage3.js');
+  var workerStage1 = new SharedWorker('./js/workers/workerstage1.js');
+  var workerStage2 = new SharedWorker('./js/workers/workerstage2.js');
+  var workerStage3 = new SharedWorker('./js/workers/workerstage3.js');
 
   //send data to first worker
-  workerStage1.postMessage(JSON.stringify(data));
-  data = []; // clear data
+  workerStage1.port.postMessage(data);
 
   //on message of the first worker
+  workerStage1.port.onmessage = function(res) {
 
-  workerStage1.onmessage = function(res) {
-    var data = JSON.parse(res.data);
-    //console.log('Stage 1 done @ ', new Date());
     perfTable('Stage 1', (new Date()).getTime());
 
     //determine chunksize used in worker 1
-    chunkSize = data.length;
+    chunkSize = res.data.length;
     console.log('The array is split into', chunkSize + ' chunks.');
     $('#chunks').html(chunkSize);
 
-    arrEntries = data.entries();
-    data = undefined; //clear data
-    res = undefined; //clear data
+    arrEntries = res.data.entries();
 
-    workerStage2.postMessage(JSON.stringify(arrEntries.next().value[1]));
+    workerStage2.port.postMessage(arrEntries.next().value[1]);
   };
 
-  //on message of the second worker
-  workerStage2.onmessage = function(res) {
-
-    //console.log('Stage 2 done @ ', new Date());
-    perfTable('Stage 2', (new Date()).getTime());
-
-    //send data to stage 3 worker
-    workerStage3.postMessage(res.data);
-    res = undefined;
-  };
 
   //on message of the third worker
   chunk = 0;
-  workerStage3.onmessage = function(res) {
+  workerStage3.port.onmessage = function(res) {
 
-    var data = JSON.parse(res.data);
-    res = undefined;
 
-    //console.log('Stage 3 done @ ', new Date());
+    console.log('Stage 3 done @ ', new Date());
     perfTable('Stage 3', (new Date()).getTime());
     chunksDone();
 
     //send data to be assemblied
-    assembleData(data);
-    data = undefined;
+    assembleData(res.data);
 
     chunk++;
 
@@ -112,7 +94,7 @@ function workerProcessing(data) {
 
       if (arrEntry.done === false) {
 
-        workerStage2.postMessage(JSON.stringify(arrEntry.value[1]));
+        workerStage2.port.postMessage(arrEntry.value[1]);
       }
     }
   };

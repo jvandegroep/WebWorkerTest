@@ -1,19 +1,35 @@
 /*
   WORKER STAGE 2
 */
-onmessage = function(e) {
+onconnect = function(e) {
+  var port2 = e.ports[0];
 
-  var data = JSON.parse(e.data);
-  console.log('Worker stage 2: message received from importmgmt.js');
+  port2.onmessage = function(e) {
 
-  // process here
-  var array = [];
+    importScripts("..\\main.js");
+    console.log('Worker stage 2: message received from importmgmt.js');
 
-  data.forEach( function(line) {
+    // process here
+    var array = [];
 
-    array.push(line.split(','));
-  });
+    e.data.forEach( function(line) {
 
-  //post back results
-  postMessage(JSON.stringify(array));
+      array.push(line.split(','));
+    });
+
+    //post back results
+    //port.postMessage(array);
+
+    //send data to stage 3 worker
+    workerStage3.port.postMessage(res.data);
+    perfTable('Stage 2', (new Date()).getTime());
+  };
+
+  self.onerror = function (e) {
+    ports.forEach(function (port) { port.postMessage(e); });
+  };
+}
+
+self.onerror = function (e) {
+  ports.forEach(function (port) { port.postMessage(e); });
 };

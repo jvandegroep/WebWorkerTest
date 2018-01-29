@@ -1,22 +1,30 @@
 /*
   WORKER STAGE 3
 */
+onconnect = function(e) {
+  var port3 = e.ports[0];
 
-onmessage = function(e) {
-  var data = JSON.parse(e.data);
+  console.log({'Worker stage 3 connected initiated..'});
 
-  console.log('Worker stage 3: message received from importmgmt.js');
+  port3.onmessage = function(e) {
 
-  // process here
-  data.forEach( function(subArr){
+    console.log('Worker stage 3: message received from importmgmt.js');
 
-    subArrLen = subArr.length;
+    // process here
+    e.data.forEach( function(subArr){
 
-    for (var i = 0; i < subArrLen; i++) {
-      subArr[3] = "dit is een test";
-    }
-  });
+      subArrLen = subArr.length;
 
-  //post back results
-  postMessage(JSON.stringify(data));
-};
+      for (var i = 0; i < subArrLen; i++) {
+        subArr[3] = "dit is een test";
+      }
+    });
+
+    //post back results
+    port3.postMessage(data);
+  };
+}
+
+onerror = function(err) {
+  throw(err);
+}
